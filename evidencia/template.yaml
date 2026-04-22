@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  TalleresTable:
+    Type: AWS::Serverless::SimpleTable # DynamoDB
+    Properties:
+      PrimaryKey:
+        Name: id
+        Type: String
+
+  GetTalleresFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs18.x
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /talleres
+            Method: get
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref TalleresTable }

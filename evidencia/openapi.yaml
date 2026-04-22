@@ -1,0 +1,46 @@
+openapi: 3.0.3
+info:
+  title: API de Gestión de Talleres de Formación
+  version: 1.0.0
+paths:
+  /talleres:
+    get:
+      summary: Listar todos los talleres disponibles
+      responses:
+        '200':
+          description: Lista de talleres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Taller'
+    post:
+      summary: Crear un nuevo taller (Requiere Auth)
+      security:
+        - CognitoUserPool: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Taller'
+      responses:
+        '201':
+          description: Taller creado exitosamente
+
+components:
+  securitySchemes:
+    CognitoUserPool:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-amazon-apigateway-authtype: cognito_user_pools
+  schemas:
+    Taller:
+      type: object
+      properties:
+        id: { type: string }
+        titulo: { type: string }
+        fecha: { type: string, format: date-time }
+        instructor: { type: string }
